@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/news"
+        android:icon="@drawable/ic_news"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff"
+        android:title="News"/>
+
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ic_notifications"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff"
+        android:title="Notifications"/>
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff"
+        android:title="Settings"/>
+</menu>
