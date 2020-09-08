@@ -5,7 +5,7 @@
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_backgroundColor="@color/colorHome"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff"
         android:title="Home"/>
@@ -14,7 +14,7 @@
         android:id="@+id/news"
         android:icon="@drawable/ic_news"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_backgroundColor="@color/colorNews"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff"
         android:title="News"/>
@@ -23,7 +23,7 @@
         android:id="@+id/notifications"
         android:icon="@drawable/ic_notifications"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_backgroundColor="@color/colorNotifs"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff"
         android:title="Notifications"/>
@@ -32,7 +32,7 @@
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cnb_backgroundColor="@color/colorPrimary"
+        app:cnb_backgroundColor="@color/colorSettings"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff"
         android:title="Settings"/>

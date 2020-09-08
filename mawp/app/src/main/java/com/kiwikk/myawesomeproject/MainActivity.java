@@ -1,17 +1,21 @@
 package com.kiwikk.myawesomeproject;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.os.Bundle;
-
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+import com.kiwikk.myawesomeproject.fragments.HomeFragment;
+import com.kiwikk.myawesomeproject.fragments.NewsFragment;
+import com.kiwikk.myawesomeproject.fragments.NotificationsFragment;
+import com.kiwikk.myawesomeproject.fragments.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private ChipNavigationBar chipNavigationBar;
     private Fragment fragment=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
