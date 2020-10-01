@@ -1,18 +1,28 @@
 package com.kiwikk.myawesomeproject.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.kiwikk.myawesomeproject.R;
 import com.kiwikk.myawesomeproject.elements.WeekButton;
+import com.kiwikk.myawesomeproject.person.Person;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,9 +31,13 @@ import com.kiwikk.myawesomeproject.elements.WeekButton;
  */
 public class HomeFragment extends Fragment {
     private static final int WEEK_ROWS = 80;
-    private static final int WEEK_COLUMNS = 50;
+    private static final int WEEK_COLUMNS = 52;
 
+    private EditText input;
     private static View view;
+
+    int mYear, mMonth, mDay;
+    StringBuilder date;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +48,14 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Person person;
+
     public HomeFragment() {
         // Required empty public constructor
+    }
+
+    public HomeFragment(Person person) {
+        this.person = person;
     }
 
     /**
@@ -70,14 +90,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        return view;
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-        TableLayout tableLayout = (TableLayout) view.findViewById(R.id.tableLayout);
+        introduce();
+        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
 
         for (int i = 0; i <= WEEK_ROWS; i++) {
             TableRow tableRow = new TableRow(this.getContext());
@@ -94,7 +108,11 @@ public class HomeFragment extends Fragment {
                     continue;
                 }
 
-                WeekButton weekButton = new WeekButton(this.getContext(), i * 10 + j);
+                int id = (i - 1) * 52 + j;
+                WeekButton weekButton = new WeekButton(this.getContext(), id);
+                if (id < person.getWeeks())
+                    weekButton.setBackgroundColor(Color.BLACK);
+
                 weekButton.setLayoutParams(new TableRow.LayoutParams(100, 100));
                 if (j == 0) {
                     TextView textView = new TextView(this.getContext());
@@ -104,12 +122,123 @@ public class HomeFragment extends Fragment {
                     tableRow.addView(textView);
                     continue;
                 }
-
                 tableRow.addView(weekButton, j);
             }
-
             tableLayout.addView(tableRow, i);
         }
 
+
+        return view;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onPause() {
+        super.onPause();
+
+//        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
+//        for (int i = 1; i <= WEEK_ROWS; i++) {
+//            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+//
+//            for (int j = 1; j <= WEEK_COLUMNS; j++) {
+//                WeekButton weekButton = (WeekButton) tableRow.getChildAt(j);
+//                if (weekButton.getID() < person.getWeeks())
+//                    weekButton.setBackgroundColor(Color.BLACK);
+//                else break;
+//            }
+//            if (person.getWeeks() % 10 >= i) break;
+//        }
+    }
+
+    private void introduce() {
+        person = new Person();
+        getPersonName(person);
+    }
+
+    private void getPersonName(final Person person) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this.getContext());
+        alertBuilder.setTitle("Давай знакомиться");
+
+        input = new EditText(this.getContext());
+        alertBuilder.setView(input);
+        final String[] name = new String[1];
+
+        alertBuilder.setPositiveButton("Продолжим", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                name[0] = String.valueOf(input.getText());
+                person.setName(name[0]);
+
+                getBirthDate(person);
+            }
+        });
+
+        alertBuilder.setNegativeButton("Отстань", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                name[0] = "Вася";
+                Toast.makeText(getContext(),
+                        "Ну нет так нет, теперь ты - " + name[0] + ".", Toast.LENGTH_LONG).show();
+                person.setName(name[0]);
+
+                getBirthDate(person);
+            }
+        });
+
+        AlertDialog ad = alertBuilder.create();
+        ad.show();
+    }
+
+    private void getBirthDate(final Person person) {
+        final Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        date = new StringBuilder();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        if (Integer.toString(dayOfMonth).length() == 1)
+                            date.append(0);
+                        date.append(dayOfMonth).append(" ");
+                        if (Integer.toString(month + 1).length() == 1) date.append(0);
+                        date.append(month + 1).append(" ").append(year);
+
+                        person.setBirthDate(date.toString());
+
+                        colorWeeks();
+
+//                        DataBaseHelper dataBaseHelper = new DataBaseHelper(view.getContext());
+//                        dataBaseHelper.insertPerson(person);
+                    }
+                }, mYear, mMonth, mDay);
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(this,  new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                date.append(dayOfMonth).append(" ").append(month).append(" ").append(year);
+//            }
+//        }, mYear, mMonth, mDay);
+        datePickerDialog.setTitle("А теперь мне нужна твоя дата рождения");
+        datePickerDialog.setCancelable(false);
+        datePickerDialog.show();
+
+        //return date.toString();
+    }
+
+    private void colorWeeks() {
+        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
+        for (int i = 1; i <= WEEK_ROWS; i++) {
+            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+
+            for (int j = 1; j <= WEEK_COLUMNS; j++) {
+                WeekButton weekButton = (WeekButton) tableRow.getChildAt(j);
+                if (weekButton.getID() < person.getWeeks())
+                    weekButton.setBackgroundResource(R.drawable.ic_cross);
+                //else break;
+            }
+            //if (person.getWeeks() % 10 >= i) break;
+        }
     }
 }

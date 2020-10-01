@@ -29,4 +29,8 @@ public class WeekButton extends Button {
         return ID;
     }
 
+    public void setLived() {
+        isLived=true;
+        setBackgroundColor(Color.BLACK);
+    }
 }
