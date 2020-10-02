@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +110,7 @@ public class HomeFragment extends Fragment {
                 int id = (i - 1) * 52 + j;
                 WeekButton weekButton = new WeekButton(this.getContext(), id);
                 if (id < person.getWeeks())
-                    weekButton.setBackgroundColor(Color.BLACK);
+                    weekButton.setLived();
 
                 weekButton.setLayoutParams(new TableRow.LayoutParams(100, 100));
                 if (j == 0) {
@@ -235,10 +234,8 @@ public class HomeFragment extends Fragment {
             for (int j = 1; j <= WEEK_COLUMNS; j++) {
                 WeekButton weekButton = (WeekButton) tableRow.getChildAt(j);
                 if (weekButton.getID() < person.getWeeks())
-                    weekButton.setBackgroundResource(R.drawable.ic_cross);
-                //else break;
+                    weekButton.setLived();
             }
-            //if (person.getWeeks() % 10 >= i) break;
         }
     }
 }

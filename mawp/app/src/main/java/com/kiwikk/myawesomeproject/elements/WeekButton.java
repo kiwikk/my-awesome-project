@@ -4,17 +4,32 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
+
+import com.kiwikk.myawesomeproject.R;
 
 @SuppressLint("AppCompatCustomView")
 public class WeekButton extends Button {
     private int ID;
     private Color color;
     private Boolean isLived;
+    private WeekCard weekCard;
 
     public WeekButton(Context context, int id) {
         super(context);
         ID = id;
+        weekCard = new WeekCard(context, this);
+        openCard();
+    }
+
+    private void openCard() {
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                weekCard.create().show();
+            }
+        });
     }
 
     public WeekButton(Context context, AttributeSet attrs) {
@@ -30,7 +45,7 @@ public class WeekButton extends Button {
     }
 
     public void setLived() {
-        isLived=true;
-        setBackgroundColor(Color.BLACK);
+        isLived = true;
+        setBackgroundResource(R.drawable.ic_cross);
     }
 }
