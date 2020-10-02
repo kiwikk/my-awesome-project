@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_not_ok" android:state_checked="false">
-        <color android:color="@color/dark_gray" />
-    </item>
-    <item android:drawable="@drawable/ic_ok" android:state_checked="true">
-        <color android:color="@color/yellow_happy" />
-    </item>
-</selector>

@@ -53,10 +53,6 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public HomeFragment(Person person) {
-        this.person = person;
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -90,8 +86,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         introduce();
-        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
 
+        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
         for (int i = 0; i <= WEEK_ROWS; i++) {
             TableRow tableRow = new TableRow(this.getContext());
             tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -108,7 +104,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 int id = (i - 1) * 52 + j;
-                WeekButton weekButton = new WeekButton(this.getContext(), id);
+                WeekButton weekButton = new WeekButton(this.getContext(), id, getFragmentManager());
                 if (id < person.getWeeks())
                     weekButton.setLived();
 

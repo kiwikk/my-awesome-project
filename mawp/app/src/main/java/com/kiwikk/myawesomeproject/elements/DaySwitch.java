@@ -11,7 +11,8 @@ public class DaySwitch extends SwitchCompat {
 
     public DaySwitch(Context context) {
         super(context);
-       // setRotation(90);
+        //setRotation(90);
+       // setText("12");
         setListeners();
     }
 
@@ -36,7 +37,6 @@ public class DaySwitch extends SwitchCompat {
 
 
         setThumbResource(id);
-
         // getThumbDrawable().setColorFilter(new ColorFilter());
 
     }
