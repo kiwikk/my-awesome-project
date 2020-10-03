@@ -35,9 +35,7 @@ public class DaySwitch extends SwitchCompat {
             id = R.drawable.ic_not_ok;
         }
 
-
         setThumbResource(id);
         // getThumbDrawable().setColorFilter(new ColorFilter());
-
     }
 }

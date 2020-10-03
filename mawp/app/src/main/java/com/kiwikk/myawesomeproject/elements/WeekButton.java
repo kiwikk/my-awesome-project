@@ -28,7 +28,7 @@ public class WeekButton extends Button {
         setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                weekCard.show(fragmentManager, "weekCard");
+                weekCard.show(fragmentManager, weekCard.getTag());
             }
         });
     }
