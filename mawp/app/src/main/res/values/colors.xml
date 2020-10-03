@@ -7,4 +7,6 @@
     <color name="colorNews">#fae3d9</color>
     <color name="colorNotifs">#bbded6</color>
     <color name="colorSettings">#8ac6d1</color>
+    <color name="dark_gray">#9C9B9B</color>
+    <color name="yellow_happy">#FFBB80</color>
 </resources>
