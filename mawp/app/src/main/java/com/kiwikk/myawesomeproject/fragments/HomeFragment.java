@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
 
     private EditText input;
     private static View view;
+    private TableLayout tableLayout;
 
     int mYear, mMonth, mDay;
     StringBuilder date;
@@ -86,18 +87,21 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         introduce();
+        createTable();
+        return view;
+    }
 
-        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
+    private void createTable() {
+        tableLayout = view.findViewById(R.id.tableLayout);
         for (int i = 0; i <= WEEK_ROWS; i++) {
             TableRow tableRow = new TableRow(this.getContext());
-            tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
 
             for (int j = 0; j <= WEEK_COLUMNS; j++) {
                 if (i == 0) {
                     TextView textView = new TextView(this.getContext());
                     if (j != 0 && j % 10 == 0 || j == 1) textView.setText(Integer.toString(j));
                     else textView.setText("");
+                    textView.setPadding(20, 0, 0, 0);
 
                     tableRow.addView(textView);
                     continue;
@@ -105,25 +109,35 @@ public class HomeFragment extends Fragment {
 
                 int id = (i - 1) * 52 + j;
                 WeekButton weekButton = new WeekButton(this.getContext(), id, getFragmentManager());
+
                 if (id < person.getWeeks())
                     weekButton.setLived();
 
-                weekButton.setLayoutParams(new TableRow.LayoutParams(100, 100));
+                TableRow.LayoutParams p = new TableRow.LayoutParams(70, 70);
+                p.setMargins(-5, 0, -5, 0);
+                weekButton.setLayoutParams(p);
+
                 if (j == 0) {
                     TextView textView = new TextView(this.getContext());
                     if (i % 10 == 0 || i == 1) textView.setText(Integer.toString(i));
                     else textView.setText("");
 
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, -10, 0, -10);
+                    textView.setLayoutParams(params);
                     tableRow.addView(textView);
                     continue;
                 }
+
+                TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, -10, 0, -10);
+                tableRow.setLayoutParams(params);
+
                 tableRow.addView(weekButton, j);
             }
             tableLayout.addView(tableRow, i);
         }
 
-
-        return view;
     }
 
     @SuppressLint("SetTextI18n")
