@@ -123,14 +123,15 @@ public class HomeFragment extends Fragment {
                     else textView.setText("");
 
                     TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(0, -10, 0, -10);
+                    params.setMargins(0, -15, 10, -15);
                     textView.setLayoutParams(params);
+
                     tableRow.addView(textView);
                     continue;
                 }
 
                 TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0, -10, 0, -10);
+                params.setMargins(0, -10, 25, -10);
                 tableRow.setLayoutParams(params);
 
                 tableRow.addView(weekButton, j);

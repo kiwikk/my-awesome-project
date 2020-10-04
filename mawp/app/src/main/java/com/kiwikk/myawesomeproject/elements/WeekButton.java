@@ -49,5 +49,6 @@ public class WeekButton extends Button {
     public void setLived() {
         isLived = true;
         setBackgroundResource(R.drawable.ic_cross);
+        setEnabled(false);
     }
 }
