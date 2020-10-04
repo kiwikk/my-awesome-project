@@ -130,19 +130,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
-//        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
-//        for (int i = 1; i <= WEEK_ROWS; i++) {
-//            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-//
-//            for (int j = 1; j <= WEEK_COLUMNS; j++) {
-//                WeekButton weekButton = (WeekButton) tableRow.getChildAt(j);
-//                if (weekButton.getID() < person.getWeeks())
-//                    weekButton.setBackgroundColor(Color.BLACK);
-//                else break;
-//            }
-//            if (person.getWeeks() % 10 >= i) break;
-//        }
+        colorWeeks();
     }
 
     private void introduce() {
@@ -209,17 +197,9 @@ public class HomeFragment extends Fragment {
 //                        dataBaseHelper.insertPerson(person);
                     }
                 }, mYear, mMonth, mDay);
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(this,  new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                date.append(dayOfMonth).append(" ").append(month).append(" ").append(year);
-//            }
-//        }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("А теперь мне нужна твоя дата рождения");
         datePickerDialog.setCancelable(false);
         datePickerDialog.show();
-
-        //return date.toString();
     }
 
     private void colorWeeks() {
