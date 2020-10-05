@@ -71,7 +71,6 @@ public class WeekCard extends BottomSheetDialogFragment {
                     }
                 });
 
-
                 AlertDialog ad = alertBuilder.create();
                 ad.show();
             }
