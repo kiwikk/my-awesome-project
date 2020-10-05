@@ -137,7 +137,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getContext(),
-                                "Ну нет так нет", Toast.LENGTH_LONG).show();
+                                "Смотри мне -.-", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -177,7 +177,7 @@ public class SettingsFragment extends Fragment {
                         HomeFragment.getDbHelper().updateDB(person, db, "DATE_OF_BIRTH");
                     }
                 }, mYear, mMonth, mDay);
-        datePickerDialog.setTitle("А теперь мне нужна твоя дата рождения");
+        datePickerDialog.setTitle("Ну меняй, меняй");
         datePickerDialog.setCancelable(false);
         datePickerDialog.show();
     }

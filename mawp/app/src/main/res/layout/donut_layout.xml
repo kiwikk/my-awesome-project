@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/donut"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="300dp"
         android:background="@drawable/donut"/>
 
