@@ -127,6 +127,8 @@ public class SettingsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 name[0] = String.valueOf(input.getText());
                 person.setName(name[0]);
+                Toast.makeText(getContext(),
+                        "Допустим", Toast.LENGTH_LONG).show();
 
                 HomeFragment.getDbHelper().updateDB(person, db, "NAME");
             }
