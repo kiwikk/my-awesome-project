@@ -212,7 +212,8 @@ public class SettingsFragment extends Fragment {
                 builder.setPositiveButton("Спасибо", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Toast.makeText(getContext(),
+                                "Обращайся))", Toast.LENGTH_LONG).show();
                     }
                 });
 
