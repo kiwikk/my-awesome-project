@@ -8,11 +8,11 @@ import com.kiwikk.myawesomeproject.R;
 
 public class DaySwitch extends SwitchCompat {
     boolean state;
+    int id;
 
-    public DaySwitch(Context context) {
+    public DaySwitch(Context context, int id) {
         super(context);
-        //setRotation(90);
-       // setText("12");
+        this.id = id;
         setListeners();
     }
 
@@ -37,5 +37,10 @@ public class DaySwitch extends SwitchCompat {
 
         setThumbResource(id);
         // getThumbDrawable().setColorFilter(new ColorFilter());
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }
