@@ -40,24 +40,20 @@ public class HomeFragment extends Fragment {
     private static View view;
     private TableLayout tableLayout;
 
-    int mYear, mMonth, mDay;
-    StringBuilder date;
+    private int mYear, mMonth, mDay;
+    private StringBuilder date;
 
-    private DataBaseHelper dbHelper;
-    private SQLiteDatabase db;
     private SharedPreferences sharedPreferences;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private static Person person;
+    private static DataBaseHelper dbHelper;
+    private SQLiteDatabase db;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -263,5 +259,9 @@ public class HomeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         db.close();
+    }
+
+    public static DataBaseHelper getDbHelper() {
+        return dbHelper;
     }
 }

@@ -2,4 +2,9 @@
     <string name="app_name">My awesome project</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Я хочу</string>
+    <string name="notiffs_off">Отключить уведомления</string>
+    <string name="notiffs_on">Включить уведомления</string>
+    <string name="change_name">Изменить своё имя</string>
+    <string name="change_date">Изменить свою дату рождения</string>
 </resources>
