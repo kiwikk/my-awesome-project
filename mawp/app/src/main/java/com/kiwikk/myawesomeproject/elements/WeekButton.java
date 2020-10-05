@@ -22,7 +22,7 @@ public class WeekButton extends Button {
     public WeekButton(final Context context, int id, final FragmentManager fragmentManager) {
         super(context);
         ID = id;
-        weekCard = new WeekCard();
+        weekCard = new WeekCard(this);
         this.fragmentManager=fragmentManager;
 
         setOnClickListener(new View.OnClickListener() {
@@ -49,5 +49,6 @@ public class WeekButton extends Button {
     public void setLived() {
         isLived = true;
         setBackgroundResource(R.drawable.ic_cross);
+        setEnabled(false);
     }
 }

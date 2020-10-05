@@ -1,9 +1,12 @@
 package com.kiwikk.myawesomeproject.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.kiwikk.myawesomeproject.R;
+import com.kiwikk.myawesomeproject.database.DataBaseHelper;
 import com.kiwikk.myawesomeproject.elements.WeekButton;
 import com.kiwikk.myawesomeproject.person.Person;
 
@@ -34,9 +38,15 @@ public class HomeFragment extends Fragment {
 
     private EditText input;
     private static View view;
+    private TableLayout tableLayout;
 
     int mYear, mMonth, mDay;
     StringBuilder date;
+
+    private DataBaseHelper dbHelper;
+    private SQLiteDatabase db;
+    private SharedPreferences sharedPreferences;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +57,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Person person;
+    private static Person person;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -78,6 +88,8 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        dbHelper = new DataBaseHelper(getContext());
+        sharedPreferences = getActivity().getSharedPreferences("com.kiwikk.myawesomeproject", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -85,19 +97,38 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        introduce();
 
-        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
+        if (sharedPreferences.getBoolean("firstrun", true)) {
+            introduce();
+            sharedPreferences.edit().putBoolean("firstrun", false).apply();
+        } else {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query("PERSON",
+                    new String[]{"_id", "NAME", "DATE_OF_BIRTH"},
+                    "_id = 1", null,
+                    //new String[]{Integer.toString(1)},
+                    null, null, null);
+
+            cursor.moveToFirst();
+            person = new Person(cursor.getString(1), cursor.getString(2));
+            cursor.close();
+        }
+        createTable();
+        colorWeeks();
+        return view;
+    }
+
+    private void createTable() {
+        tableLayout = view.findViewById(R.id.tableLayout);
         for (int i = 0; i <= WEEK_ROWS; i++) {
             TableRow tableRow = new TableRow(this.getContext());
-            tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
 
             for (int j = 0; j <= WEEK_COLUMNS; j++) {
                 if (i == 0) {
                     TextView textView = new TextView(this.getContext());
                     if (j != 0 && j % 10 == 0 || j == 1) textView.setText(Integer.toString(j));
                     else textView.setText("");
+                    textView.setPadding(20, 0, 0, 0);
 
                     tableRow.addView(textView);
                     continue;
@@ -105,44 +136,40 @@ public class HomeFragment extends Fragment {
 
                 int id = (i - 1) * 52 + j;
                 WeekButton weekButton = new WeekButton(this.getContext(), id, getFragmentManager());
+
                 if (id < person.getWeeks())
                     weekButton.setLived();
 
-                weekButton.setLayoutParams(new TableRow.LayoutParams(100, 100));
+                TableRow.LayoutParams p = new TableRow.LayoutParams(70, 70);
+                p.setMargins(-5, 0, -5, 0);
+                weekButton.setLayoutParams(p);
+
                 if (j == 0) {
                     TextView textView = new TextView(this.getContext());
                     if (i % 10 == 0 || i == 1) textView.setText(Integer.toString(i));
                     else textView.setText("");
 
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, -15, 10, -15);
+                    textView.setLayoutParams(params);
+
                     tableRow.addView(textView);
                     continue;
                 }
+                TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, -10, 25, -10);
+                tableRow.setLayoutParams(params);
+
                 tableRow.addView(weekButton, j);
             }
             tableLayout.addView(tableRow, i);
         }
 
-
-        return view;
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onPause() {
         super.onPause();
-
-//        TableLayout tableLayout = view.findViewById(R.id.tableLayout);
-//        for (int i = 1; i <= WEEK_ROWS; i++) {
-//            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-//
-//            for (int j = 1; j <= WEEK_COLUMNS; j++) {
-//                WeekButton weekButton = (WeekButton) tableRow.getChildAt(j);
-//                if (weekButton.getID() < person.getWeeks())
-//                    weekButton.setBackgroundColor(Color.BLACK);
-//                else break;
-//            }
-//            if (person.getWeeks() % 10 >= i) break;
-//        }
     }
 
     private void introduce() {
@@ -153,6 +180,7 @@ public class HomeFragment extends Fragment {
     private void getPersonName(final Person person) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this.getContext());
         alertBuilder.setTitle("Давай знакомиться");
+        alertBuilder.setMessage("Я - твой мотивационный помощник Мотя, а ты?");
 
         input = new EditText(this.getContext());
         alertBuilder.setView(input);
@@ -190,6 +218,7 @@ public class HomeFragment extends Fragment {
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         date = new StringBuilder();
+        db = dbHelper.getWritableDatabase();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT,
                 new DatePickerDialog.OnDateSetListener() {
@@ -205,21 +234,12 @@ public class HomeFragment extends Fragment {
 
                         colorWeeks();
 
-//                        DataBaseHelper dataBaseHelper = new DataBaseHelper(view.getContext());
-//                        dataBaseHelper.insertPerson(person);
+                        dbHelper.insertPerson(person, db);
                     }
                 }, mYear, mMonth, mDay);
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(this,  new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                date.append(dayOfMonth).append(" ").append(month).append(" ").append(year);
-//            }
-//        }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("А теперь мне нужна твоя дата рождения");
         datePickerDialog.setCancelable(false);
         datePickerDialog.show();
-
-        //return date.toString();
     }
 
     private void colorWeeks() {
@@ -233,5 +253,15 @@ public class HomeFragment extends Fragment {
                     weekButton.setLived();
             }
         }
+    }
+
+    public static Person getPerson() {
+        return person;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }
