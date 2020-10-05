@@ -22,6 +22,11 @@ public class WeekCard extends BottomSheetDialogFragment {
     EditText input;
     LinearLayout tasksLayout;
     LayoutInflater inflater;
+    TableRow tableRow;
+
+    public WeekCard() {
+
+    }
 
     @Nullable
     @Override
@@ -40,7 +45,6 @@ public class WeekCard extends BottomSheetDialogFragment {
 
     private void addTask() {
         ImageButton createButton = getView().findViewById(R.id.addButton);
-
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,7 @@ public class WeekCard extends BottomSheetDialogFragment {
 
 
     private void createDays() {
-        TableRow tableRow = getView().findViewById(R.id.switchTableRow);
+        tableRow = getView().findViewById(R.id.switchTableRow);
 //        tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 //                ViewGroup.LayoutParams.WRAP_CONTENT));
 //        tableRow.setPadding(20,0,0,0);

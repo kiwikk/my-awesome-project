@@ -1,9 +1,12 @@
 package com.kiwikk.myawesomeproject.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.kiwikk.myawesomeproject.R;
+import com.kiwikk.myawesomeproject.database.DataBaseHelper;
 import com.kiwikk.myawesomeproject.elements.WeekButton;
 import com.kiwikk.myawesomeproject.person.Person;
 
@@ -39,6 +43,11 @@ public class HomeFragment extends Fragment {
     int mYear, mMonth, mDay;
     StringBuilder date;
 
+    private DataBaseHelper dbHelper;
+    private SQLiteDatabase db;
+    private SharedPreferences sharedPreferences;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,7 +57,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Person person;
+    private static Person person;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -79,6 +88,8 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        dbHelper = new DataBaseHelper(getContext());
+        sharedPreferences = getActivity().getSharedPreferences("com.kiwikk.myawesomeproject", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -86,8 +97,24 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        introduce();
+
+        if (sharedPreferences.getBoolean("firstrun", true)) {
+            introduce();
+            sharedPreferences.edit().putBoolean("firstrun", false).apply();
+        } else {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query("PERSON",
+                    new String[]{"_id", "NAME", "DATE_OF_BIRTH"},
+                    "_id = 1", null,
+                    //new String[]{Integer.toString(1)},
+                    null, null, null);
+
+            cursor.moveToFirst();
+            person = new Person(cursor.getString(1), cursor.getString(2));
+            cursor.close();
+        }
         createTable();
+        colorWeeks();
         return view;
     }
 
@@ -129,7 +156,6 @@ public class HomeFragment extends Fragment {
                     tableRow.addView(textView);
                     continue;
                 }
-
                 TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, -10, 25, -10);
                 tableRow.setLayoutParams(params);
@@ -141,11 +167,9 @@ public class HomeFragment extends Fragment {
 
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onPause() {
         super.onPause();
-        colorWeeks();
     }
 
     private void introduce() {
@@ -156,6 +180,7 @@ public class HomeFragment extends Fragment {
     private void getPersonName(final Person person) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this.getContext());
         alertBuilder.setTitle("Давай знакомиться");
+        alertBuilder.setMessage("Я - твой мотивационный помощник Мотя, а ты?");
 
         input = new EditText(this.getContext());
         alertBuilder.setView(input);
@@ -193,6 +218,7 @@ public class HomeFragment extends Fragment {
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         date = new StringBuilder();
+        db = dbHelper.getWritableDatabase();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT,
                 new DatePickerDialog.OnDateSetListener() {
@@ -208,8 +234,7 @@ public class HomeFragment extends Fragment {
 
                         colorWeeks();
 
-//                        DataBaseHelper dataBaseHelper = new DataBaseHelper(view.getContext());
-//                        dataBaseHelper.insertPerson(person);
+                        dbHelper.insertPerson(person, db);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("А теперь мне нужна твоя дата рождения");
@@ -228,5 +253,15 @@ public class HomeFragment extends Fragment {
                     weekButton.setLived();
             }
         }
+    }
+
+    public static Person getPerson() {
+        return person;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 }
