@@ -25,20 +25,18 @@ public class WeekCard extends BottomSheetDialogFragment {
     WeekButton weekButton;
     EditText input;
     LinearLayout tasksLayout;
-    LayoutInflater inflater;
     TableRow switchRow, switchTextRow;
     LocalDate myDate;
 
     public WeekCard(WeekButton weekButton) {
         this.weekButton = weekButton;
-        myDate = HomeFragment.getPerson().getLDate().plusWeeks(weekButton.getID());
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
-        this.inflater = inflater;
+        myDate = HomeFragment.getPerson().getLDate().plusWeeks(weekButton.getID());
         return view;
     }
 
@@ -114,6 +112,9 @@ public class WeekCard extends BottomSheetDialogFragment {
         for (int i = 0; i < 7; i++) {
             DaySwitch daySwitch = new DaySwitch(this.getContext(), i);
             daySwitch.setLayoutParams(params);
+            if (myDate.plusDays(i).isAfter(LocalDate.now())) {
+                daySwitch.setEnabled(false);
+            }
 
             TextView textView = new TextView(this.getContext());
             textView.setText(Integer.toString(myDate.plusDays(i).getDayOfMonth()));

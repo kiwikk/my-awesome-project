@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         if (sharedPreferences.getBoolean("firstrun", true)) {
@@ -105,9 +106,11 @@ public class HomeFragment extends Fragment {
                     //new String[]{Integer.toString(1)},
                     null, null, null);
 
-            cursor.moveToFirst();
-            person = new Person(cursor.getString(1), cursor.getString(2));
-            cursor.close();
+            if (cursor != null) {
+                cursor.moveToFirst();
+                person = new Person(cursor.getString(1), cursor.getString(2));
+                cursor.close();
+            }
         }
         createTable();
         colorWeeks();
