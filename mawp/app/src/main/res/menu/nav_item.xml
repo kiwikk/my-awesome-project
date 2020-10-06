@@ -11,22 +11,13 @@
         android:title="Home"/>
 
     <item
-        android:id="@+id/news"
-        android:icon="@drawable/ic_news"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cnb_backgroundColor="@color/colorNews"
-        app:cnb_iconColor="#ffffff"
-        app:cnb_textColor="#ffffff"
-        android:title="News"/>
-
-    <item
         android:id="@+id/notifications"
         android:icon="@drawable/ic_notifications"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:cnb_backgroundColor="@color/colorNotifs"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff"
-        android:title="Notifications"/>
+        android:title="Motivation"/>
 
     <item
         android:id="@+id/settings"
